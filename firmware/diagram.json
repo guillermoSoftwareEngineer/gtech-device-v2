@@ -1,0 +1,18 @@
+{
+    "version": 1,
+    "author": "JOSE GUILLERMO",
+    "editor": "wokwi",
+    "parts": [
+        {
+            "type": "board-mfrc522",
+            "id": "rfid1",
+            "top": 16.55,
+            "left": 339.44,
+            "rotate": 0,
+            "hide": false,
+            "attrs": {}
+        }
+    ],
+    "connections": [],
+    "dependencies": {}
+}
