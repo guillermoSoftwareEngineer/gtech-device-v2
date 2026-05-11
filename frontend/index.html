@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GTech·Device V2 — Dashboard</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;700&family=Syne:wght@400;600;700;800&display=swap"
+        rel="stylesheet" />
+    <style>
+        :root {
+            --bg: #0A0F1E;
+            --bg2: #0F1629;
+            --bg3: #141d35;
+            --border: #1E2D4A;
+            --accent: #4F6EF7;
+            --accent2: #7C3AED;
+            --green: #10B981;
+            --red: #EF4444;
+            --amber: #F59E0B;
+            --cyan: #06B6D4;
+            --text: #E2E8F0;
+            --muted: #64748B;
+            --card: #0D1526;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'JetBrains Mono', monospace;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* ── GRID BACKGROUND ── */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image:
+                linear-gradient(var(--border) 1px, transparent 1px),
+                linear-gradient(90deg, var(--border) 1px, transparent 1px);
+            background-size: 40px 40px;
+            opacity: 0.3;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ── GLOW ── */
+        body::after {
+            content: '';
+            position: fixed;
+            top: -200px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 800px;
+            height: 400px;
+            background: radial-gradient(ellipse, rgba(79, 110, 247, 0.15) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .wrap {
+            position: relative;
+            z-index: 1;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 24px 60px;
+        }
+
+        /* ── HEADER ── */
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 24px 0 32px;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 32px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .logo-text {
+            font-family: 'Syne', sans-serif;
+            font-size: 20px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .logo-text span {
+            color: var(--accent);
+        }
+
+        .logo-sub {
+            font-size: 11px;
+            color: var(--muted);
+            letter-spacing: 2px;
+            margin-top: 2px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .live-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            color: var(--green);
+            font-weight: 600;
+        }
+
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--green);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 0.5;
+                transform: scale(0.8);
+            }
+        }
+
+        .btn-refresh {
+            background: var(--bg3);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            transition: all 0.2s;
+        }
+
+        .btn-refresh:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        /* ── STATE MACHINE ── */
+        .state-bar {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-bottom: 28px;
+        }
+
+        .state-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .state-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--state-color, var(--border));
+            transition: all 0.3s;
+        }
+
+        .state-card.active {
+            border-color: var(--state-color);
+            background: color-mix(in srgb, var(--state-color) 8%, var(--card));
+            box-shadow: 0 0 30px color-mix(in srgb, var(--state-color) 15%, transparent);
+        }
+
+        .state-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            background: color-mix(in srgb, var(--state-color, var(--border)) 15%, transparent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .state-label {
+            font-family: 'Syne', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--state-color, var(--muted));
+        }
+
+        .state-desc {
+            font-size: 11px;
+            color: var(--muted);
+            margin-top: 2px;
+        }
+
+        /* ── GRID LAYOUT ── */
+        .grid-main {
+            display: grid;
+            grid-template-columns: 1fr 1fr 360px;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .grid-bottom {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        /* ── CARD ── */
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .card-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--muted);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-title .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--accent);
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        /* ── METRICS ── */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .metric {
+            background: var(--bg3);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 14px 16px;
+        }
+
+        .metric-val {
+            font-family: 'Syne', sans-serif;
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--accent);
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+
+        .metric-val.green {
+            color: var(--green);
+        }
+
+        .metric-val.amber {
+            color: var(--amber);
+        }
+
+        .metric-val.red {
+            color: var(--red);
+        }
+
+        .metric-val.cyan {
+            color: var(--cyan);
+        }
+
+        .metric-label {
+            font-size: 11px;
+            color: var(--muted);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        /* ── EVENTS TABLE ── */
+        .events-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+        }
+
+        .events-table th {
+            text-align: left;
+            padding: 8px 12px;
+            color: var(--muted);
+            font-size: 10px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            border-bottom: 1px solid var(--border);
+            font-weight: 600;
+        }
+
+        .events-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid rgba(30, 45, 74, 0.5);
+            vertical-align: middle;
+        }
+
+        .events-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .events-table tr:hover td {
+            background: rgba(79, 110, 247, 0.04);
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-green {
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--green);
+        }
+
+        .badge-red {
+            background: rgba(239, 68, 68, 0.15);
+            color: var(--red);
+        }
+
+        .badge-amber {
+            background: rgba(245, 158, 11, 0.15);
+            color: var(--amber);
+        }
+
+        .badge-blue {
+            background: rgba(79, 110, 247, 0.15);
+            color: var(--accent);
+        }
+
+        /* ── TARJETAS ── */
+        .tarjeta-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .tarjeta-item:last-child {
+            border-bottom: none;
+        }
+
+        .tarjeta-uid {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--cyan);
+            letter-spacing: 1px;
+        }
+
+        .tarjeta-date {
+            font-size: 11px;
+            color: var(--muted);
+            margin-top: 2px;
+        }
+
+        .btn-revoke {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: var(--red);
+            padding: 4px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            transition: all 0.2s;
+        }
+
+        .btn-revoke:hover {
+            background: rgba(239, 68, 68, 0.2);
+        }
+
+        /* ── ADD CARD FORM ── */
+        .add-card-form {
+            display: flex;
+            gap: 8px;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border);
+        }
+
+        .input-uid {
+            flex: 1;
+            background: var(--bg3);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 8px 12px;
+            color: var(--text);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .input-uid:focus {
+            border-color: var(--accent);
+        }
+
+        .input-uid::placeholder {
+            color: var(--muted);
+        }
+
+        .btn-add {
+            background: var(--accent);
+            border: none;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .btn-add:hover {
+            background: #3d5ce8;
+        }
+
+        /* ── HEARTBEAT ── */
+        .hb-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+        }
+
+        .hb-item {
+            background: var(--bg3);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 12px;
+            text-align: center;
+        }
+
+        .hb-val {
+            font-family: 'Syne', sans-serif;
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--cyan);
+        }
+
+        .hb-label {
+            font-size: 10px;
+            color: var(--muted);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-top: 4px;
+        }
+
+        /* ── QUEUE INDICATOR ── */
+        .queue-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--bg3);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 14px 16px;
+            margin-bottom: 12px;
+        }
+
+        .queue-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .queue-badge {
+            background: var(--red);
+            color: white;
+            font-size: 12px;
+            font-weight: 800;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .queue-badge.empty {
+            background: var(--green);
+        }
+
+        .queue-text {
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        /* ── DIAGNOSTICO ── */
+        .btn-diag {
+            width: 100%;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            border: none;
+            color: white;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            transition: all 0.2s;
+            margin-top: 12px;
+        }
+
+        .btn-diag:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        /* ── LOADING ── */
+        .loading {
+            color: var(--muted);
+            font-size: 12px;
+            text-align: center;
+            padding: 20px;
+            animation: blink 1.5s infinite;
+        }
+
+        @keyframes blink {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.3;
+            }
+        }
+
+        /* ── TOAST ── */
+        #toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: var(--bg3);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 12px 20px;
+            font-size: 13px;
+            z-index: 999;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.3s;
+            pointer-events: none;
+        }
+
+        #toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        #toast.ok {
+            border-color: var(--green);
+            color: var(--green);
+        }
+
+        #toast.err {
+            border-color: var(--red);
+            color: var(--red);
+        }
+
+        #toast.info {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        /* ── UPTIME BAR ── */
+        .uptime-bar {
+            height: 4px;
+            background: var(--border);
+            border-radius: 2px;
+            margin-top: 8px;
+            overflow: hidden;
+        }
+
+        .uptime-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--green), var(--cyan));
+            border-radius: 2px;
+            transition: width 1s;
+        }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 1100px) {
+            .grid-main {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .state-bar {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 700px) {
+
+            .grid-main,
+            .grid-bottom {
+                grid-template-columns: 1fr;
+            }
+
+            .state-bar {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            header {
+                flex-direction: column;
+                gap: 12px;
+                align-items: flex-start;
+            }
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 30px;
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .ts {
+            color: var(--muted);
+            font-size: 11px;
+        }
+
+        .uid-cell {
+            color: var(--cyan);
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrap">
+
+        <!-- HEADER -->
+        <header>
+            <div class="logo">
+                <div class="logo-icon">⚡</div>
+                <div>
+                    <div class="logo-text">GTech<span>·</span>Device <span
+                            style="color:var(--muted);font-weight:400">V2</span></div>
+                    <div class="logo-sub">SISTEMA DE CONTROL RFID — DASHBOARD</div>
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="live-badge">
+                    <div class="live-dot"></div> EN VIVO
+                </div>
+                <button class="btn-refresh" onclick="cargarTodo()">⟳ ACTUALIZAR</button>
+            </div>
+        </header>
+
+        <!-- MÁQUINA DE ESTADOS -->
+        <div class="state-bar" id="stateMachine">
+            <div class="state-card" id="st-boot" style="--state-color: var(--amber)">
+                <div class="state-icon">🟡</div>
+                <div>
+                    <div class="state-label">BOOT</div>
+                    <div class="state-desc">Inicializando sistema</div>
+                </div>
+            </div>
+            <div class="state-card" id="st-listo" style="--state-color: var(--green)">
+                <div class="state-icon">🟢</div>
+                <div>
+                    <div class="state-label">LISTO</div>
+                    <div class="state-desc">Operativo — esperando tarjeta</div>
+                </div>
+            </div>
+            <div class="state-card" id="st-error" style="--state-color: var(--red)">
+                <div class="state-icon">🔴</div>
+                <div>
+                    <div class="state-label">ERROR WiFi</div>
+                    <div class="state-desc">Sin conexión — cola activa</div>
+                </div>
+            </div>
+            <div class="state-card" id="st-diag" style="--state-color: var(--accent)">
+                <div class="state-icon">🔵</div>
+                <div>
+                    <div class="state-label">DIAGNÓSTICO</div>
+                    <div class="state-desc">Analizando métricas</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- GRID PRINCIPAL -->
+        <div class="grid-main">
+
+            <!-- MÉTRICAS -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <div class="dot"></div> MÉTRICAS DEL SISTEMA
+                    </div>
+                    <span id="lastUpdate" style="font-size:10px;color:var(--muted)">—</span>
+                </div>
+                <div class="card-body">
+                    <div class="metrics-grid">
+                        <div class="metric">
+                            <div class="metric-val green" id="m-enviados">—</div>
+                            <div class="metric-label">Eventos enviados</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-val amber" id="m-cola">—</div>
+                            <div class="metric-label">En cola offline</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-val cyan" id="m-reconex">—</div>
+                            <div class="metric-label">Reconexiones</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-val" id="m-uptime">—</div>
+                            <div class="metric-label">Uptime (seg)</div>
+                        </div>
+                    </div>
+
+                    <!-- COLA OFFLINE INDICATOR -->
+                    <div class="queue-bar" style="margin-top:16px">
+                        <div class="queue-info">
+                            <div class="queue-badge empty" id="queueBadge">0</div>
+                            <div>
+                                <div style="font-size:12px;font-weight:600" id="queueText">Cola offline vacía</div>
+                                <div class="queue-text">Todos los eventos enviados</div>
+                            </div>
+                        </div>
+                        <div class="badge badge-green" id="queueStatus">OK</div>
+                    </div>
+
+                    <!-- HEARTBEAT -->
+                    <div style="margin-top:16px">
+                        <div
+                            style="font-size:10px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:10px">
+                            Último Heartbeat</div>
+                        <div class="hb-grid">
+                            <div class="hb-item">
+                                <div class="hb-val" id="hb-tarjetas">—</div>
+                                <div class="hb-label">Tarjetas</div>
+                            </div>
+                            <div class="hb-item">
+                                <div class="hb-val" id="hb-estado">—</div>
+                                <div class="hb-label">Estado</div>
+                            </div>
+                            <div class="hb-item">
+                                <div class="hb-val" id="hb-device">—</div>
+                                <div class="hb-label">Device</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="btn-diag" onclick="solicitarDiagnostico()">
+                        ⚙ SOLICITAR DIAGNÓSTICO REMOTO
+                    </button>
+                </div>
+            </div>
+
+            <!-- EVENTOS -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <div class="dot"></div> HISTORIAL DE EVENTOS
+                    </div>
+                    <span id="eventCount" style="font-size:11px;color:var(--muted)">0 registros</span>
+                </div>
+                <div class="card-body" style="padding:0;overflow-x:auto">
+                    <table class="events-table">
+                        <thead>
+                            <tr>
+                                <th>TIMESTAMP</th>
+                                <th>UID</th>
+                                <th>TIPO</th>
+                                <th>FUENTE</th>
+                            </tr>
+                        </thead>
+                        <tbody id="eventosBody">
+                            <tr>
+                                <td colspan="4" class="loading">Cargando eventos...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- TARJETAS -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <div class="dot"></div> TARJETAS AUTORIZADAS
+                    </div>
+                    <span id="cardCount" style="font-size:11px;color:var(--muted)">0</span>
+                </div>
+                <div class="card-body">
+                    <div id="tarjetasList">
+                        <div class="loading">Cargando tarjetas...</div>
+                    </div>
+                    <div class="add-card-form">
+                        <input class="input-uid" id="newUID" type="text" placeholder="UID — ej: A1B2C3D4"
+                            maxlength="8" />
+                        <button class="btn-add" onclick="agregarTarjeta()">+ AGREGAR</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- TOAST -->
+    <div id="toast"></div>
+
+    <script>
+        // ── CONFIG ──────────────────────────────────────────────────
+        const GAS_URL = 'https://script.google.com/macros/s/AKfycbxepUEakmoDbwkDN9AtLgMF5V3IwDR6VdP3nxrCG94Pd4qY4ZGiaVK2uFxAE7PcPxCc/exec';
+
+        // ── TOAST ───────────────────────────────────────────────────
+        function toast(msg, type = 'info') {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.className = 'show ' + type;
+            setTimeout(() => t.className = '', 3000);
+        }
+
+        // ── FETCH ───────────────────────────────────────────────────
+        async function gasGet(accion) {
+            const res = await fetch(`${GAS_URL}?accion=${accion}`);
+            return res.json();
+        }
+
+        async function gasPost(body) {
+            const res = await fetch(GAS_URL, {
+                method: 'POST',
+                body: JSON.stringify(body)
+            });
+            return res.json();
+        }
+
+        // ── ESTADO ──────────────────────────────────────────────────
+        const ESTADOS = ['BOOT', 'LISTO', 'ERROR_WIFI', 'DIAGNOSTICO'];
+        const STATE_IDS = ['st-boot', 'st-listo', 'st-error', 'st-diag'];
+
+        function setEstadoUI(estado) {
+            STATE_IDS.forEach(id => document.getElementById(id).classList.remove('active'));
+            const idx = typeof estado === 'number' ? estado : ESTADOS.indexOf(estado);
+            if (idx >= 0 && idx < STATE_IDS.length) {
+                document.getElementById(STATE_IDS[idx]).classList.add('active');
+            }
+        }
+
+        // ── CARGAR HEARTBEAT ────────────────────────────────────────
+        async function cargarHeartbeat() {
+            try {
+                const res = await gasGet('heartbeat');
+                if (!res.ok) return;
+                const d = res.data;
+
+                document.getElementById('m-enviados').textContent = d['Enviados'] ?? '—';
+                document.getElementById('m-cola').textContent = d['Cola'] ?? '—';
+                document.getElementById('m-reconex').textContent = d['Reconexiones'] ?? '—';
+                document.getElementById('m-uptime').textContent = d['Uptime'] ?? '—';
+                document.getElementById('hb-tarjetas').textContent = d['Tarjetas'] ?? '—';
+                document.getElementById('hb-device').textContent = (d['Device'] || '—').replace('GTech-ESP32-', '');
+
+                const estadoNum = d['Estado'] ?? -1;
+                document.getElementById('hb-estado').textContent = ESTADOS[estadoNum] ?? '—';
+                setEstadoUI(estadoNum);
+
+                const cola = parseInt(d['Cola'] || 0);
+                const qb = document.getElementById('queueBadge');
+                const qt = document.getElementById('queueText');
+                const qs = document.getElementById('queueStatus');
+                qb.textContent = cola;
+                if (cola > 0) {
+                    qb.className = 'queue-badge';
+                    qt.textContent = `${cola} evento(s) pendientes`;
+                    qs.className = 'badge badge-amber';
+                    qs.textContent = 'PENDIENTE';
+                } else {
+                    qb.className = 'queue-badge empty';
+                    qt.textContent = 'Cola offline vacía';
+                    qs.className = 'badge badge-green';
+                    qs.textContent = 'OK';
+                }
+
+                const ts = d['Timestamp'] ? new Date(d['Timestamp']).toLocaleTimeString('es-CO') : '—';
+                document.getElementById('lastUpdate').textContent = `Último HB: ${ts}`;
+
+            } catch (e) {
+                console.error('Heartbeat error:', e);
+            }
+        }
+
+        // ── CARGAR EVENTOS ──────────────────────────────────────────
+        async function cargarEventos() {
+            const tbody = document.getElementById('eventosBody');
+            try {
+                const res = await gasGet('eventos');
+                if (!res.ok || !res.data.length) {
+                    tbody.innerHTML = '<tr><td colspan="4" class="empty-state">Sin eventos registrados</td></tr>';
+                    return;
+                }
+                const eventos = res.data.reverse();
+                document.getElementById('eventCount').textContent = `${eventos.length} registros`;
+                tbody.innerHTML = eventos.map(e => {
+                    const ts = e.Timestamp ? new Date(e.Timestamp).toLocaleString('es-CO') : '—';
+                    const tipoBadge = e.Tipo === 'ACCESO'
+                        ? '<span class="badge badge-green">✓ ACCESO</span>'
+                        : '<span class="badge badge-red">✗ DENEGADO</span>';
+                    const fuenteBadge = (e.Fuente || '').includes('offline')
+                        ? '<span class="badge badge-amber">OFFLINE</span>'
+                        : '<span class="badge badge-blue">ONLINE</span>';
+                    return `<tr>
+          <td class="ts">${ts}</td>
+          <td class="uid-cell">${e.UID || '—'}</td>
+          <td>${tipoBadge}</td>
+          <td>${fuenteBadge}</td>
+        </tr>`;
+                }).join('');
+            } catch (e) {
+                tbody.innerHTML = '<tr><td colspan="4" class="empty-state">Error cargando eventos</td></tr>';
+            }
+        }
+
+        // ── CARGAR TARJETAS ─────────────────────────────────────────
+        async function cargarTarjetas() {
+            const list = document.getElementById('tarjetasList');
+            try {
+                const res = await gasGet('tarjetas');
+                if (!res.ok || !res.data.length) {
+                    list.innerHTML = '<div class="empty-state">Sin tarjetas registradas</div>';
+                    document.getElementById('cardCount').textContent = '0';
+                    return;
+                }
+                document.getElementById('cardCount').textContent = res.data.length;
+                list.innerHTML = res.data.map(t => `
+        <div class="tarjeta-item">
+          <div>
+            <div class="tarjeta-uid">${t.UID || '—'}</div>
+            <div class="tarjeta-date">${t.FechaAlta ? new Date(t.FechaAlta).toLocaleDateString('es-CO') : '—'}</div>
+          </div>
+          <button class="btn-revoke" onclick="revocarTarjeta('${t.UID}')">REVOCAR</button>
+        </div>
+      `).join('');
+            } catch (e) {
+                list.innerHTML = '<div class="empty-state">Error cargando tarjetas</div>';
+            }
+        }
+
+        // ── AGREGAR TARJETA ─────────────────────────────────────────
+        async function agregarTarjeta() {
+            const uid = document.getElementById('newUID').value.trim().toUpperCase();
+            if (!uid || uid.length < 6) {
+                toast('UID inválido — mínimo 6 caracteres', 'err');
+                return;
+            }
+            try {
+                toast('Enviando al dispositivo...', 'info');
+                await gasPost({ tipo: 'add-card', uid });
+                document.getElementById('newUID').value = '';
+                toast('Tarjeta agregada correctamente', 'ok');
+                cargarTarjetas();
+            } catch (e) {
+                toast('Error al agregar tarjeta', 'err');
+            }
+        }
+
+        // ── REVOCAR TARJETA ─────────────────────────────────────────
+        async function revocarTarjeta(uid) {
+            if (!confirm(`¿Revocar acceso a tarjeta ${uid}?`)) return;
+            try {
+                await gasPost({ tipo: 'delete-card', uid });
+                toast(`Tarjeta ${uid} revocada`, 'ok');
+                cargarTarjetas();
+            } catch (e) {
+                toast('Error al revocar tarjeta', 'err');
+            }
+        }
+
+        // ── DIAGNÓSTICO REMOTO ──────────────────────────────────────
+        async function solicitarDiagnostico() {
+            toast('Solicitando diagnóstico al ESP32...', 'info');
+            setEstadoUI(3);
+            setTimeout(() => {
+                cargarHeartbeat();
+                toast('Diagnóstico completado', 'ok');
+            }, 3000);
+        }
+
+        // ── CARGAR TODO ─────────────────────────────────────────────
+        async function cargarTodo() {
+            toast('Actualizando dashboard...', 'info');
+            await Promise.all([
+                cargarHeartbeat(),
+                cargarEventos(),
+                cargarTarjetas()
+            ]);
+        }
+
+        // ── AUTO REFRESH cada 30 seg ─────────────────────────────────
+        cargarTodo();
+        setInterval(cargarTodo, 30000);
+    </script>
+</body>
+
+</html>
