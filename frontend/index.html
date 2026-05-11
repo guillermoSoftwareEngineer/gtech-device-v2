@@ -92,14 +92,17 @@
         }
 
         .logo-icon {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, var(--accent), var(--accent2));
-            border-radius: 8px;
+            width: 44px;
+            height: 44px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .logo-icon svg {
+            width: 44px;
+            height: 44px;
         }
 
         .logo-text {
@@ -660,6 +663,8 @@
         }
 
         /* ── RESPONSIVE ── */
+
+        /* iPad Mini (768px) */
         @media (max-width: 1100px) {
             .grid-main {
                 grid-template-columns: 1fr 1fr;
@@ -670,9 +675,12 @@
             }
         }
 
-        @media (max-width: 700px) {
+        /* iPad Mini portrait (768px) */
+        @media (max-width: 820px) {
+            .grid-main {
+                grid-template-columns: 1fr;
+            }
 
-            .grid-main,
             .grid-bottom {
                 grid-template-columns: 1fr;
             }
@@ -681,10 +689,182 @@
                 grid-template-columns: repeat(2, 1fr);
             }
 
+            .wrap {
+                padding: 0 16px 48px;
+            }
+        }
+
+        /* Samsung Galaxy S8+ (360px) | iPhone SE (375px) | iPhone 12 Pro (390px)
+       Pixel 7 (412px) | iPhone XR (414px) */
+        @media (max-width: 430px) {
+            .wrap {
+                padding: 0 12px 40px;
+            }
+
             header {
                 flex-direction: column;
                 gap: 12px;
                 align-items: flex-start;
+                padding: 16px 0 20px;
+            }
+
+            .header-right {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .logo-text {
+                font-size: 16px;
+            }
+
+            .logo-sub {
+                font-size: 10px;
+            }
+
+            .state-bar {
+                grid-template-columns: 1fr 1fr;
+                gap: 8px;
+            }
+
+            .state-card {
+                padding: 12px 10px;
+                gap: 8px;
+            }
+
+            .state-icon {
+                width: 34px;
+                height: 34px;
+                font-size: 16px;
+            }
+
+            .state-label {
+                font-size: 11px;
+            }
+
+            .state-desc {
+                font-size: 9px;
+            }
+
+            .grid-main,
+            .grid-bottom {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            .metrics-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 8px;
+            }
+
+            .metric {
+                padding: 10px 12px;
+            }
+
+            .metric-val {
+                font-size: 22px;
+            }
+
+            .hb-grid {
+                grid-template-columns: 1fr 1fr 1fr;
+                gap: 6px;
+            }
+
+            .hb-val {
+                font-size: 16px;
+            }
+
+            .card-body {
+                padding: 14px;
+            }
+
+            /* Tabla scroll horizontal en móvil */
+            .card-body[style*="overflow"] {
+                padding: 0;
+            }
+
+            .events-table {
+                min-width: 480px;
+            }
+
+            .events-table th,
+            .events-table td {
+                padding: 8px 10px;
+                font-size: 11px;
+            }
+
+            .add-card-form {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .btn-add {
+                width: 100%;
+            }
+
+            .input-uid {
+                width: 100%;
+            }
+
+            .btn-diag {
+                font-size: 11px;
+                padding: 10px;
+            }
+
+            footer {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 16px;
+                padding: 20px 0 8px;
+            }
+
+            .footer-links {
+                width: 100%;
+                justify-content: flex-start;
+                gap: 10px;
+            }
+
+            .footer-link {
+                font-size: 11px;
+                padding: 6px 12px;
+            }
+
+            .footer-name {
+                font-size: 13px;
+            }
+
+            .footer-copy {
+                font-size: 10px;
+            }
+
+            #toast {
+                left: 12px;
+                right: 12px;
+                bottom: 16px;
+                font-size: 12px;
+            }
+        }
+
+        /* Samsung Galaxy S8+ (360px) — el más estrecho */
+        @media (max-width: 375px) {
+            .state-bar {
+                grid-template-columns: 1fr 1fr;
+                gap: 6px;
+            }
+
+            .state-card {
+                padding: 10px 8px;
+            }
+
+            .state-label {
+                font-size: 10px;
+            }
+
+            .metric-val {
+                font-size: 20px;
+            }
+
+            .logo-text {
+                font-size: 15px;
             }
         }
 
@@ -714,7 +894,14 @@
         <!-- HEADER -->
         <header>
             <div class="logo">
-                <div class="logo-icon">⚡</div>
+                <div class="logo-icon"><svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="4" y="4" width="92" height="92" rx="18" stroke="#4F6EF7" stroke-width="6"
+                            fill="none" />
+                        <polyline points="22,36 46,52 22,68" stroke="#4F6EF7" stroke-width="7.5" stroke-linecap="round"
+                            stroke-linejoin="round" fill="none" />
+                        <line x1="52" y1="70" x2="80" y2="70" stroke="#4F6EF7" stroke-width="7.5"
+                            stroke-linecap="round" />
+                    </svg></div>
                 <div>
                     <div class="logo-text">GTech<span>·</span>Device <span
                             style="color:var(--muted);font-weight:400">V2</span></div>
@@ -882,6 +1069,36 @@
     </div>
 
     <!-- TOAST -->
+    <div class="wrap">
+        <footer>
+            <div class="footer-left">
+                <div class="footer-logo"><svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="4" y="4" width="92" height="92" rx="18" stroke="#4F6EF7" stroke-width="6"
+                            fill="none" />
+                        <polyline points="22,36 46,52 22,68" stroke="#4F6EF7" stroke-width="7.5" stroke-linecap="round"
+                            stroke-linejoin="round" fill="none" />
+                        <line x1="52" y1="70" x2="80" y2="70" stroke="#4F6EF7" stroke-width="7.5"
+                            stroke-linecap="round" />
+                    </svg></div>
+                <div>
+                    <div class="footer-name">Guillermo <span>Vásquez</span></div>
+                    <div class="footer-copy">© 2026 — GTech·Device V2 — Ingeniero de Sistemas Aplicados</div>
+                </div>
+            </div>
+            <div class="footer-links">
+                <a class="footer-link" href="https://github.com/guillermoSoftwareEngineer" target="_blank"><svg
+                        viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.38.6.11.82-.26.82-.58v-2.03c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49 1 .11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02 0 2.04.13 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.66 1.66.24 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58C20.57 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z" />
+                    </svg>GitHub</a>
+                <a class="footer-link" href="https://linkedin.com/in/guillermovasbendev" target="_blank"><svg
+                        viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.13 1.45-2.13 2.94v5.67H9.37V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.59 0 4.26 2.37 4.26 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.55V9h3.57v11.45zM22.23 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.46C23.21 24 24 23.23 24 22.28V1.72C24 .77 23.21 0 22.23 0z" />
+                    </svg>LinkedIn</a>
+            </div>
+        </footer>
+    </div>
     <div id="toast"></div>
 
     <script>
@@ -1078,3 +1295,77 @@
 </body>
 
 </html>
+
+<style>
+    footer {
+        border-top: 1px solid var(--border);
+        margin-top: 48px;
+        padding: 28px 0 8px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: relative;
+        z-index: 1;
+    }
+
+    .footer-left {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .footer-logo svg {
+        width: 28px;
+        height: 28px;
+    }
+
+    .footer-name {
+        font-family: 'Syne', sans-serif;
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--text);
+    }
+
+    .footer-name span {
+        color: var(--accent);
+    }
+
+    .footer-copy {
+        font-size: 11px;
+        color: var(--muted);
+        margin-top: 2px;
+    }
+
+    .footer-links {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+    }
+
+    .footer-link {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        color: var(--muted);
+        text-decoration: none;
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        padding: 7px 14px;
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        transition: all 0.2s;
+    }
+
+    .footer-link:hover {
+        color: var(--accent);
+        border-color: var(--accent);
+        background: rgba(79, 110, 247, 0.06);
+    }
+
+    .footer-link svg {
+        width: 15px;
+        height: 15px;
+        flex-shrink: 0;
+    }
+</style>
