@@ -225,6 +225,25 @@
       box-shadow: 0 0 40px color-mix(in srgb, var(--state-color) 20%, transparent);
     }
 
+    /* ── ESTADO OFFLINE ── */
+    #st-offline.active {
+      animation: anim-offline 2.5s ease-in-out infinite;
+    }
+
+    @keyframes anim-offline {
+
+      0%,
+      100% {
+        box-shadow: 0 0 8px rgba(100, 116, 139, 0.1);
+        border-color: rgba(100, 116, 139, 0.2);
+      }
+
+      50% {
+        box-shadow: 0 0 20px rgba(100, 116, 139, 0.3);
+        border-color: rgba(100, 116, 139, 0.5);
+      }
+    }
+
     /* ── ANIMACIONES POR ESTADO ── */
 
     /* BOOT — parpadeo lento amarillo */
@@ -1087,6 +1106,13 @@
           <div class="state-desc">Analizando métricas</div>
         </div>
       </div>
+      <div class="state-card active" id="st-offline" style="--state-color: var(--muted)">
+        <div class="state-icon">⚫</div>
+        <div>
+          <div class="state-label" style="color:var(--muted)">OFFLINE</div>
+          <div class="state-desc" id="offlineDesc">Conectando con el dispositivo...</div>
+        </div>
+      </div>
     </div>
 
     <!-- GRID PRINCIPAL -->
@@ -1274,6 +1300,7 @@
 
     function setEstadoUI(estado) {
       const idx = typeof estado === 'number' ? estado : ESTADOS.indexOf(estado);
+      const ALL_STATE_IDS = [...STATE_IDS, 'st-offline'];
 
       // Fade out current
       const current = document.querySelector('.state-card.active');
@@ -1281,8 +1308,10 @@
         current.style.opacity = '0';
         current.style.transform = 'translateY(-6px)';
         setTimeout(() => {
-          STATE_IDS.forEach(id => document.getElementById(id).classList.remove('active'));
-          // Fade in new
+          ALL_STATE_IDS.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.classList.remove('active');
+          });
           if (idx >= 0 && idx < STATE_IDS.length) {
             const next = document.getElementById(STATE_IDS[idx]);
             next.style.opacity = '0';
@@ -1295,7 +1324,10 @@
           }
         }, 250);
       } else {
-        STATE_IDS.forEach(id => document.getElementById(id).classList.remove('active'));
+        ALL_STATE_IDS.forEach(id => {
+          const el = document.getElementById(id);
+          if (el) el.classList.remove('active');
+        });
         if (idx >= 0 && idx < STATE_IDS.length) {
           document.getElementById(STATE_IDS[idx]).classList.add('active');
         }
@@ -1306,9 +1338,28 @@
     async function cargarHeartbeat() {
       try {
         const res = await gasGet('heartbeat');
-        if (!res.ok) return;
+        if (!res.ok) {
+          setEstadoOffline(0);
+          document.getElementById('offlineDesc').textContent = 'Sin datos del dispositivo';
+          return;
+        }
         const d = res.data;
 
+        // ── Detección de offline via Epoch ──────────────────────
+        const epoch = parseInt(d['Epoch'] || 0);
+        const ahoraMs = Date.now();
+        const diffSeg = Math.floor((ahoraMs - epoch) / 1000);
+        const offline = epoch > 0 && diffSeg > 60;
+
+        if (offline) {
+          setEstadoOffline(diffSeg);
+        } else {
+          const estadoNum = parseInt(d['Estado'] ?? -1);
+          document.getElementById('hb-estado').textContent = ESTADOS[estadoNum] ?? '—';
+          setEstadoOnline(estadoNum);
+        }
+
+        // ── Métricas ────────────────────────────────────────────
         document.getElementById('m-enviados').textContent = d['Enviados'] ?? '—';
         document.getElementById('m-cola').textContent = d['Cola'] ?? '—';
         document.getElementById('m-reconex').textContent = d['Reconexiones'] ?? '—';
@@ -1316,10 +1367,7 @@
         document.getElementById('hb-tarjetas').textContent = d['Tarjetas'] ?? '—';
         document.getElementById('hb-device').textContent = (d['Device'] || '—').replace('GTech-ESP32-', '');
 
-        const estadoNum = d['Estado'] ?? -1;
-        document.getElementById('hb-estado').textContent = ESTADOS[estadoNum] ?? '—';
-        setEstadoUI(estadoNum);
-
+        // ── Cola ────────────────────────────────────────────────
         const cola = parseInt(d['Cola'] || 0);
         const qb = document.getElementById('queueBadge');
         const qt = document.getElementById('queueText');
@@ -1337,11 +1385,49 @@
           qs.textContent = 'OK';
         }
 
-        const ts = d['Timestamp'] ? new Date(d['Timestamp']).toLocaleTimeString('es-CO') : '—';
-        document.getElementById('lastUpdate').textContent = `Último HB: ${ts}`;
+        // ── Timestamp legible Colombia ──────────────────────────
+        const ts = d['Timestamp'] || '—';
+        const hace = offline
+          ? diffSeg < 120 ? `hace ${diffSeg}s` : `hace ${Math.floor(diffSeg / 60)}min`
+          : 'ahora';
+        document.getElementById('lastUpdate').textContent = `HB: ${ts} (${hace})`;
 
       } catch (e) {
         console.error('Heartbeat error:', e);
+      }
+    }
+
+    // ── ESTADO OFFLINE ──────────────────────────────────────────
+    function setEstadoOffline(diffSeg) {
+      const ALL_STATE_IDS = [...STATE_IDS, 'st-offline'];
+      ALL_STATE_IDS.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.classList.remove('active');
+      });
+
+      const offlineCard = document.getElementById('st-offline');
+      if (!offlineCard) return;
+
+      let desc = 'Sin señal del dispositivo';
+      if (diffSeg > 0) {
+        const mins = Math.floor(diffSeg / 60);
+        const segs = diffSeg % 60;
+        desc = mins > 0 ? `${mins}m ${segs}s sin señal` : `${diffSeg}s sin señal`;
+      }
+      document.getElementById('offlineDesc').textContent = desc;
+      offlineCard.classList.add('active');
+      document.getElementById('hb-estado').textContent = 'OFFLINE';
+    }
+
+    // ── ESTADO ONLINE (restaura estado real) ─────────────────────
+    function setEstadoOnline(estadoNum) {
+      const ALL_STATE_IDS = [...STATE_IDS, 'st-offline'];
+      ALL_STATE_IDS.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.classList.remove('active');
+      });
+      if (estadoNum >= 0 && estadoNum < STATE_IDS.length) {
+        document.getElementById(STATE_IDS[estadoNum]).classList.add('active');
       }
     }
 
