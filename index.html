@@ -1047,6 +1047,78 @@
       font-weight: 600;
       letter-spacing: 1px;
     }
+
+    footer {
+      border-top: 1px solid var(--border);
+      margin-top: 48px;
+      padding: 28px 0 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+      z-index: 1;
+    }
+
+    .footer-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .footer-logo svg {
+      width: 28px;
+      height: 28px;
+    }
+
+    .footer-name {
+      font-family: 'Syne', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .footer-name span {
+      color: var(--accent);
+    }
+
+    .footer-copy {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .footer-links {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .footer-link {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      padding: 7px 14px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      transition: all 0.2s;
+    }
+
+    .footer-link:hover {
+      color: var(--accent);
+      border-color: var(--accent);
+      background: rgba(79, 110, 247, 0.06);
+    }
+
+    .footer-link svg {
+      width: 15px;
+      height: 15px;
+      flex-shrink: 0;
+    }
   </style>
 </head>
 
@@ -1349,7 +1421,7 @@
         const epoch = parseInt(d['Epoch'] || 0);
         const ahoraMs = Date.now();
         const diffSeg = Math.floor((ahoraMs - epoch) / 1000);
-        const offline = epoch > 0 && diffSeg > 60;
+        const offline = epoch > 0 && diffSeg > 180;
 
         if (offline) {
           setEstadoOffline(diffSeg);
@@ -1443,7 +1515,7 @@
         const eventos = res.data.reverse();
         document.getElementById('eventCount').textContent = `${eventos.length} registros`;
         tbody.innerHTML = eventos.map(e => {
-          const ts = e.Timestamp ? new Date(e.Timestamp).toLocaleString('es-CO') : '—';
+          const ts = e.Timestamp ? String(e.Timestamp) : '—';
           const tipoBadge = e.Tipo === 'ACCESO'
             ? '<span class="badge badge-green">✓ ACCESO</span>'
             : '<span class="badge badge-red">✗ DENEGADO</span>';
@@ -1452,7 +1524,7 @@
             : '<span class="badge badge-blue">ONLINE</span>';
           return `<tr>
           <td class="ts">${ts}</td>
-          <td class="uid-cell">${e.UID || '—'}</td>
+          <td class="uid-cell">${String(e.UID || '').padStart(8, '0') || '—'}</td>
           <td>${tipoBadge}</td>
           <td>${fuenteBadge}</td>
         </tr>`;
@@ -1476,16 +1548,17 @@
         list.innerHTML = res.data.map(t => `
         <div class="tarjeta-item">
           <div>
-            <div class="tarjeta-uid">${t.UID || '—'}</div>
-            <div class="tarjeta-date">${t.FechaAlta ? new Date(t.FechaAlta).toLocaleDateString('es-CO') : '—'}</div>
+            <div class="tarjeta-uid">${uid}</div>
+            <div class="tarjeta-date">${t.FechaAlta ? String(t.FechaAlta) : '—'}</div>
           </div>
-          <button class="btn-revoke" onclick="revocarTarjeta('${t.UID}')">REVOCAR</button>
+          <button class="btn-revoke" onclick="revocarTarjeta('${uid}')">REVOCAR</button>
         </div>
-      `).join('');
-      } catch (e) {
-        list.innerHTML = '<div class="empty-state">Error cargando tarjetas</div>';
-      }
+      `;
+      }).join('');
+    } catch (e) {
+      list.innerHTML = '<div class="empty-state">Error cargando tarjetas</div>';
     }
+  }
 
     // ── AGREGAR TARJETA ─────────────────────────────────────────
     async function agregarTarjeta() {
@@ -1573,77 +1646,3 @@
 </body>
 
 </html>
-
-<style>
-  footer {
-    border-top: 1px solid var(--border);
-    margin-top: 48px;
-    padding: 28px 0 8px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    position: relative;
-    z-index: 1;
-  }
-
-  .footer-left {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-
-  .footer-logo svg {
-    width: 28px;
-    height: 28px;
-  }
-
-  .footer-name {
-    font-family: 'Syne', sans-serif;
-    font-size: 14px;
-    font-weight: 700;
-    color: var(--text);
-  }
-
-  .footer-name span {
-    color: var(--accent);
-  }
-
-  .footer-copy {
-    font-size: 11px;
-    color: var(--muted);
-    margin-top: 2px;
-  }
-
-  .footer-links {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-  }
-
-  .footer-link {
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    color: var(--muted);
-    text-decoration: none;
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-    padding: 7px 14px;
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    transition: all 0.2s;
-  }
-
-  .footer-link:hover {
-    color: var(--accent);
-    border-color: var(--accent);
-    background: rgba(79, 110, 247, 0.06);
-  }
-
-  .footer-link svg {
-    width: 15px;
-    height: 15px;
-    flex-shrink: 0;
-  }
-</style>
