@@ -39,7 +39,6 @@
       overflow-x: hidden;
     }
 
-    /* ── GRID BACKGROUND ── */
     body::before {
       content: '';
       position: fixed;
@@ -53,7 +52,6 @@
       z-index: 0;
     }
 
-    /* ── GLOW ── */
     body::after {
       content: '';
       position: fixed;
@@ -75,7 +73,6 @@
       padding: 0 24px 60px;
     }
 
-    /* ── HEADER ── */
     header {
       display: flex;
       align-items: center;
@@ -181,7 +178,6 @@
       color: var(--accent);
     }
 
-    /* ── STATE MACHINE ── */
     .state-bar {
       display: flex;
       align-items: stretch;
@@ -225,7 +221,6 @@
       box-shadow: 0 0 40px color-mix(in srgb, var(--state-color) 20%, transparent);
     }
 
-    /* ── ESTADO OFFLINE ── */
     #st-offline.active {
       animation: anim-offline 2.5s ease-in-out infinite;
     }
@@ -244,9 +239,6 @@
       }
     }
 
-    /* ── ANIMACIONES POR ESTADO ── */
-
-    /* BOOT — parpadeo lento amarillo */
     #st-boot.active {
       animation: anim-boot 1.8s ease-in-out infinite;
     }
@@ -265,7 +257,6 @@
       }
     }
 
-    /* LISTO — pulso verde suave expansivo */
     #st-listo.active {
       animation: anim-listo 2.4s ease-in-out infinite;
     }
@@ -274,7 +265,7 @@
 
       0%,
       100% {
-        box-shadow: 0 0 12px rgba(16, 185, 129, 0.2), 0 0 0px rgba(16, 185, 129, 0);
+        box-shadow: 0 0 12px rgba(16, 185, 129, 0.2);
       }
 
       50% {
@@ -282,7 +273,6 @@
       }
     }
 
-    /* ERROR WiFi — parpadeo rápido rojo urgente */
     #st-error.active {
       animation: anim-error 0.7s ease-in-out infinite;
     }
@@ -301,14 +291,13 @@
       }
     }
 
-    /* DIAGNÓSTICO — barrido de borde azul giratorio */
     #st-diag.active {
       animation: anim-diag 1.2s linear infinite;
     }
 
     @keyframes anim-diag {
       0% {
-        box-shadow: 4px 0 20px rgba(79, 110, 247, 0.5), 0 0 0 rgba(79, 110, 247, 0);
+        box-shadow: 4px 0 20px rgba(79, 110, 247, 0.5);
       }
 
       25% {
@@ -328,7 +317,6 @@
       }
     }
 
-    /* Efecto scan en heartbeat durante diagnóstico */
     .hb-scanning .hb-val {
       animation: scan-val 0.4s ease-in-out infinite alternate;
     }
@@ -359,7 +347,6 @@
       }
     }
 
-    /* Línea de progreso diagnóstico */
     .diag-progress {
       height: 3px;
       background: var(--border);
@@ -406,7 +393,6 @@
       margin-top: 2px;
     }
 
-    /* ── GRID LAYOUT ── */
     .grid-main {
       display: grid;
       grid-template-columns: 1fr 1fr 360px;
@@ -420,7 +406,6 @@
       gap: 20px;
     }
 
-    /* ── CARD ── */
     .card {
       background: var(--card);
       border: 1px solid var(--border);
@@ -459,7 +444,6 @@
       padding: 20px;
     }
 
-    /* ── METRICS ── */
     .metrics-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -505,7 +489,6 @@
       text-transform: uppercase;
     }
 
-    /* ── EVENTS TABLE ── */
     .events-table {
       width: 100%;
       border-collapse: collapse;
@@ -568,7 +551,6 @@
       color: var(--accent);
     }
 
-    /* ── TARJETAS ── */
     .tarjeta-item {
       display: flex;
       align-items: center;
@@ -610,7 +592,6 @@
       background: rgba(239, 68, 68, 0.2);
     }
 
-    /* ── ADD CARD FORM ── */
     .add-card-form {
       display: flex;
       gap: 8px;
@@ -658,7 +639,6 @@
       background: #3d5ce8;
     }
 
-    /* ── HEARTBEAT ── */
     .hb-grid {
       display: grid;
       grid-template-columns: 1fr 1fr 1fr;
@@ -688,7 +668,6 @@
       margin-top: 4px;
     }
 
-    /* ── QUEUE INDICATOR ── */
     .queue-bar {
       display: flex;
       align-items: center;
@@ -728,7 +707,6 @@
       color: var(--muted);
     }
 
-    /* ── DIAGNOSTICO ── */
     .btn-diag {
       width: 100%;
       background: linear-gradient(135deg, var(--accent), var(--accent2));
@@ -750,7 +728,6 @@
       transform: translateY(-1px);
     }
 
-    /* ── LOADING ── */
     .loading {
       color: var(--muted);
       font-size: 12px;
@@ -771,7 +748,6 @@
       }
     }
 
-    /* ── TOAST ── */
     #toast {
       position: fixed;
       bottom: 24px;
@@ -806,228 +782,6 @@
     #toast.info {
       border-color: var(--accent);
       color: var(--accent);
-    }
-
-    /* ── UPTIME BAR ── */
-    .uptime-bar {
-      height: 4px;
-      background: var(--border);
-      border-radius: 2px;
-      margin-top: 8px;
-      overflow: hidden;
-    }
-
-    .uptime-fill {
-      height: 100%;
-      background: linear-gradient(90deg, var(--green), var(--cyan));
-      border-radius: 2px;
-      transition: width 1s;
-    }
-
-    /* ── RESPONSIVE ── */
-
-    /* iPad Mini (768px) */
-    @media (max-width: 1100px) {
-      .grid-main {
-        grid-template-columns: 1fr 1fr;
-      }
-
-      .state-bar {
-        display: flex;
-      }
-    }
-
-    /* iPad Mini portrait (768px) */
-    @media (max-width: 820px) {
-      .grid-main {
-        grid-template-columns: 1fr;
-      }
-
-      .grid-bottom {
-        grid-template-columns: 1fr;
-      }
-
-      .state-bar {
-        display: flex;
-      }
-
-      .wrap {
-        padding: 0 16px 48px;
-      }
-    }
-
-    /* Samsung Galaxy S8+ (360px) | iPhone SE (375px) | iPhone 12 Pro (390px)
-       Pixel 7 (412px) | iPhone XR (414px) */
-    @media (max-width: 430px) {
-      .wrap {
-        padding: 0 12px 40px;
-      }
-
-      header {
-        flex-direction: column;
-        gap: 12px;
-        align-items: flex-start;
-        padding: 16px 0 20px;
-      }
-
-      .header-right {
-        width: 100%;
-        justify-content: space-between;
-      }
-
-      .logo-text {
-        font-size: 16px;
-      }
-
-      .logo-sub {
-        font-size: 10px;
-      }
-
-      .state-bar {
-        grid-template-columns: 1fr 1fr;
-        gap: 8px;
-      }
-
-      .state-card {
-        padding: 12px 10px;
-        gap: 8px;
-      }
-
-      .state-icon {
-        width: 34px;
-        height: 34px;
-        font-size: 16px;
-      }
-
-      .state-label {
-        font-size: 11px;
-      }
-
-      .state-desc {
-        font-size: 9px;
-      }
-
-      .grid-main,
-      .grid-bottom {
-        grid-template-columns: 1fr;
-        gap: 12px;
-      }
-
-      .metrics-grid {
-        grid-template-columns: 1fr 1fr;
-        gap: 8px;
-      }
-
-      .metric {
-        padding: 10px 12px;
-      }
-
-      .metric-val {
-        font-size: 22px;
-      }
-
-      .hb-grid {
-        grid-template-columns: 1fr 1fr 1fr;
-        gap: 6px;
-      }
-
-      .hb-val {
-        font-size: 16px;
-      }
-
-      .card-body {
-        padding: 14px;
-      }
-
-      /* Tabla scroll horizontal en móvil */
-      .card-body[style*="overflow"] {
-        padding: 0;
-      }
-
-      .events-table {
-        min-width: 480px;
-      }
-
-      .events-table th,
-      .events-table td {
-        padding: 8px 10px;
-        font-size: 11px;
-      }
-
-      .add-card-form {
-        flex-direction: column;
-        gap: 8px;
-      }
-
-      .btn-add {
-        width: 100%;
-      }
-
-      .input-uid {
-        width: 100%;
-      }
-
-      .btn-diag {
-        font-size: 11px;
-        padding: 10px;
-      }
-
-      footer {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 16px;
-        padding: 20px 0 8px;
-      }
-
-      .footer-links {
-        width: 100%;
-        justify-content: flex-start;
-        gap: 10px;
-      }
-
-      .footer-link {
-        font-size: 11px;
-        padding: 6px 12px;
-      }
-
-      .footer-name {
-        font-size: 13px;
-      }
-
-      .footer-copy {
-        font-size: 10px;
-      }
-
-      #toast {
-        left: 12px;
-        right: 12px;
-        bottom: 16px;
-        font-size: 12px;
-      }
-    }
-
-    /* Samsung Galaxy S8+ (360px) — el más estrecho */
-    @media (max-width: 375px) {
-      .state-bar {
-        grid-template-columns: 1fr 1fr;
-        gap: 6px;
-      }
-
-      .state-card {
-        padding: 10px 8px;
-      }
-
-      .state-label {
-        font-size: 10px;
-      }
-
-      .metric-val {
-        font-size: 20px;
-      }
-
-      .logo-text {
-        font-size: 15px;
-      }
     }
 
     .empty-state {
@@ -1119,21 +873,197 @@
       height: 15px;
       flex-shrink: 0;
     }
+
+    @media (max-width: 1100px) {
+      .grid-main {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 820px) {
+      .grid-main {
+        grid-template-columns: 1fr;
+      }
+
+      .grid-bottom {
+        grid-template-columns: 1fr;
+      }
+
+      .wrap {
+        padding: 0 16px 48px;
+      }
+    }
+
+    @media (max-width: 430px) {
+      .wrap {
+        padding: 0 12px 40px;
+      }
+
+      header {
+        flex-direction: column;
+        gap: 12px;
+        align-items: flex-start;
+        padding: 16px 0 20px;
+      }
+
+      .header-right {
+        width: 100%;
+        justify-content: space-between;
+      }
+
+      .logo-text {
+        font-size: 16px;
+      }
+
+      .logo-sub {
+        font-size: 10px;
+      }
+
+      .state-card {
+        padding: 12px 10px;
+        gap: 8px;
+      }
+
+      .state-icon {
+        width: 34px;
+        height: 34px;
+        font-size: 16px;
+      }
+
+      .state-label {
+        font-size: 11px;
+      }
+
+      .state-desc {
+        font-size: 9px;
+      }
+
+      .grid-main,
+      .grid-bottom {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      .metrics-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+      }
+
+      .metric {
+        padding: 10px 12px;
+      }
+
+      .metric-val {
+        font-size: 22px;
+      }
+
+      .hb-grid {
+        gap: 6px;
+      }
+
+      .hb-val {
+        font-size: 16px;
+      }
+
+      .card-body {
+        padding: 14px;
+      }
+
+      .events-table {
+        min-width: 480px;
+      }
+
+      .events-table th,
+      .events-table td {
+        padding: 8px 10px;
+        font-size: 11px;
+      }
+
+      .add-card-form {
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .btn-add {
+        width: 100%;
+      }
+
+      .input-uid {
+        width: 100%;
+      }
+
+      .btn-diag {
+        font-size: 11px;
+        padding: 10px;
+      }
+
+      footer {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+        padding: 20px 0 8px;
+      }
+
+      .footer-links {
+        width: 100%;
+        justify-content: flex-start;
+        gap: 10px;
+      }
+
+      .footer-link {
+        font-size: 11px;
+        padding: 6px 12px;
+      }
+
+      .footer-name {
+        font-size: 13px;
+      }
+
+      .footer-copy {
+        font-size: 10px;
+      }
+
+      #toast {
+        left: 12px;
+        right: 12px;
+        bottom: 16px;
+        font-size: 12px;
+      }
+    }
+
+    @media (max-width: 375px) {
+      .state-card {
+        padding: 10px 8px;
+      }
+
+      .state-label {
+        font-size: 10px;
+      }
+
+      .metric-val {
+        font-size: 20px;
+      }
+
+      .logo-text {
+        font-size: 15px;
+      }
+    }
   </style>
 </head>
 
 <body>
   <div class="wrap">
 
-    <!-- HEADER -->
     <header>
       <div class="logo">
-        <div class="logo-icon"><svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <div class="logo-icon">
+          <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
             <rect x="4" y="4" width="92" height="92" rx="18" stroke="#4F6EF7" stroke-width="6" fill="none" />
             <polyline points="22,36 46,52 22,68" stroke="#4F6EF7" stroke-width="7.5" stroke-linecap="round"
               stroke-linejoin="round" fill="none" />
             <line x1="52" y1="70" x2="80" y2="70" stroke="#4F6EF7" stroke-width="7.5" stroke-linecap="round" />
-          </svg></div>
+          </svg>
+        </div>
         <div>
           <div class="logo-text">GTech<span>·</span>Device <span style="color:var(--muted);font-weight:400">V2</span>
           </div>
@@ -1148,7 +1078,6 @@
       </div>
     </header>
 
-    <!-- MÁQUINA DE ESTADOS -->
     <div class="state-bar" id="stateMachine">
       <div class="state-card" id="st-boot" style="--state-color: var(--amber)">
         <div class="state-icon">🟡</div>
@@ -1187,10 +1116,8 @@
       </div>
     </div>
 
-    <!-- GRID PRINCIPAL -->
     <div class="grid-main">
 
-      <!-- MÉTRICAS -->
       <div class="card">
         <div class="card-header">
           <div class="card-title">
@@ -1218,7 +1145,6 @@
             </div>
           </div>
 
-          <!-- COLA OFFLINE INDICATOR -->
           <div class="queue-bar" style="margin-top:16px">
             <div class="queue-info">
               <div class="queue-badge empty" id="queueBadge">0</div>
@@ -1230,7 +1156,6 @@
             <div class="badge badge-green" id="queueStatus">OK</div>
           </div>
 
-          <!-- HEARTBEAT -->
           <div style="margin-top:16px">
             <div
               style="font-size:10px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:10px">
@@ -1260,7 +1185,6 @@
         </div>
       </div>
 
-      <!-- EVENTOS -->
       <div class="card">
         <div class="card-header">
           <div class="card-title">
@@ -1287,7 +1211,6 @@
         </div>
       </div>
 
-      <!-- TARJETAS -->
       <div class="card">
         <div class="card-header">
           <div class="card-title">
@@ -1307,339 +1230,272 @@
       </div>
     </div>
 
-  </div>
-
-  <!-- TOAST -->
-  <div class="wrap">
     <footer>
       <div class="footer-left">
-        <div class="footer-logo"><svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <div class="footer-logo">
+          <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
             <rect x="4" y="4" width="92" height="92" rx="18" stroke="#4F6EF7" stroke-width="6" fill="none" />
             <polyline points="22,36 46,52 22,68" stroke="#4F6EF7" stroke-width="7.5" stroke-linecap="round"
               stroke-linejoin="round" fill="none" />
             <line x1="52" y1="70" x2="80" y2="70" stroke="#4F6EF7" stroke-width="7.5" stroke-linecap="round" />
-          </svg></div>
+          </svg>
+        </div>
         <div>
           <div class="footer-name">Guillermo <span>Vásquez</span></div>
           <div class="footer-copy">© 2026 — GTech·Device V2 — Ingeniero de Sistemas Aplicados</div>
         </div>
       </div>
       <div class="footer-links">
-        <a class="footer-link" href="https://github.com/guillermoSoftwareEngineer" target="_blank"><svg
-            viewBox="0 0 24 24" fill="currentColor">
+        <a class="footer-link" href="https://github.com/guillermoSoftwareEngineer" target="_blank">
+          <svg viewBox="0 0 24 24" fill="currentColor">
             <path
               d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.38.6.11.82-.26.82-.58v-2.03c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49 1 .11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02 0 2.04.13 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.66 1.66.24 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58C20.57 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z" />
-          </svg>GitHub</a>
-        <a class="footer-link" href="https://linkedin.com/in/guillermovasbendev" target="_blank"><svg
-            viewBox="0 0 24 24" fill="currentColor">
+          </svg>GitHub
+        </a>
+        <a class="footer-link" href="https://linkedin.com/in/guillermovasbendev" target="_blank">
+          <svg viewBox="0 0 24 24" fill="currentColor">
             <path
               d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.13 1.45-2.13 2.94v5.67H9.37V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.59 0 4.26 2.37 4.26 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.55V9h3.57v11.45zM22.23 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.46C23.21 24 24 23.23 24 22.28V1.72C24 .77 23.21 0 22.23 0z" />
-          </svg>LinkedIn</a>
+          </svg>LinkedIn
+        </a>
       </div>
     </footer>
+
   </div>
+
   <div id="toast"></div>
 
   <script>
-    // ── CONFIG ──────────────────────────────────────────────────
     const GAS_URL = 'https://script.google.com/macros/s/AKfycbxepUEakmoDbwkDN9AtLgMF5V3IwDR6VdP3nxrCG94Pd4qY4ZGiaVK2uFxAE7PcPxCc/exec';
 
-    // ── TOAST ───────────────────────────────────────────────────
-    function toast(msg, type = 'info') {
-      const t = document.getElementById('toast');
+    function toast(msg, type) {
+      if (!type) type = 'info';
+      var t = document.getElementById('toast');
       t.textContent = msg;
       t.className = 'show ' + type;
-      setTimeout(() => t.className = '', 3000);
+      setTimeout(function () { t.className = ''; }, 3000);
     }
 
-    // ── FETCH ───────────────────────────────────────────────────
     async function gasGet(accion) {
-      const res = await fetch(`${GAS_URL}?accion=${accion}`);
+      var res = await fetch(GAS_URL + '?accion=' + accion);
       return res.json();
     }
 
     async function gasPost(body) {
-      const res = await fetch(GAS_URL, {
-        method: 'POST',
-        body: JSON.stringify(body)
-      });
+      var res = await fetch(GAS_URL, { method: 'POST', body: JSON.stringify(body) });
       return res.json();
     }
 
-    // ── ESTADO ──────────────────────────────────────────────────
-    const ESTADOS = ['BOOT', 'LISTO', 'ERROR_WIFI', 'DIAGNOSTICO'];
-    const STATE_IDS = ['st-boot', 'st-listo', 'st-error', 'st-diag'];
+    var ESTADOS = ['BOOT', 'LISTO', 'ERROR_WIFI', 'DIAGNOSTICO'];
+    var STATE_IDS = ['st-boot', 'st-listo', 'st-error', 'st-diag'];
+    var ALL_IDS = ['st-boot', 'st-listo', 'st-error', 'st-diag', 'st-offline'];
 
-    function setEstadoUI(estado) {
-      const idx = typeof estado === 'number' ? estado : ESTADOS.indexOf(estado);
-      const ALL_STATE_IDS = [...STATE_IDS, 'st-offline'];
+    function clearAllStates() {
+      ALL_IDS.forEach(function (id) {
+        var el = document.getElementById(id);
+        if (el) { el.classList.remove('active'); el.style.opacity = ''; el.style.transform = ''; }
+      });
+    }
 
-      // Fade out current
-      const current = document.querySelector('.state-card.active');
+    function setEstadoUI(idx) {
+      var current = document.querySelector('.state-card.active');
       if (current) {
         current.style.opacity = '0';
         current.style.transform = 'translateY(-6px)';
-        setTimeout(() => {
-          ALL_STATE_IDS.forEach(id => {
-            const el = document.getElementById(id);
-            if (el) el.classList.remove('active');
-          });
+        setTimeout(function () {
+          clearAllStates();
           if (idx >= 0 && idx < STATE_IDS.length) {
-            const next = document.getElementById(STATE_IDS[idx]);
-            next.style.opacity = '0';
-            next.style.transform = 'translateY(6px)';
-            next.classList.add('active');
-            setTimeout(() => {
-              next.style.opacity = '1';
-              next.style.transform = 'translateY(0)';
-            }, 30);
+            var next = document.getElementById(STATE_IDS[idx]);
+            if (next) {
+              next.style.opacity = '0';
+              next.style.transform = 'translateY(6px)';
+              next.classList.add('active');
+              setTimeout(function () { next.style.opacity = '1'; next.style.transform = 'translateY(0)'; }, 30);
+            }
           }
         }, 250);
       } else {
-        ALL_STATE_IDS.forEach(id => {
-          const el = document.getElementById(id);
-          if (el) el.classList.remove('active');
-        });
+        clearAllStates();
         if (idx >= 0 && idx < STATE_IDS.length) {
-          document.getElementById(STATE_IDS[idx]).classList.add('active');
+          var el = document.getElementById(STATE_IDS[idx]);
+          if (el) el.classList.add('active');
         }
       }
     }
 
-    // ── CARGAR HEARTBEAT ────────────────────────────────────────
+    function setEstadoOnline(estadoNum) { setEstadoUI(estadoNum); }
+
+    function setEstadoOffline(diffSeg) {
+      clearAllStates();
+      var card = document.getElementById('st-offline');
+      if (!card) return;
+      var desc = 'Sin señal del dispositivo';
+      if (diffSeg > 0) {
+        var mins = Math.floor(diffSeg / 60);
+        var segs = diffSeg % 60;
+        desc = mins > 0 ? (mins + 'm ' + segs + 's sin señal') : (diffSeg + 's sin señal');
+      }
+      document.getElementById('offlineDesc').textContent = desc;
+      card.classList.add('active');
+      document.getElementById('hb-estado').textContent = 'OFFLINE';
+    }
+
     async function cargarHeartbeat() {
       try {
-        const res = await gasGet('heartbeat');
+        var res = await gasGet('heartbeat');
         if (!res.ok) {
           setEstadoOffline(0);
           document.getElementById('offlineDesc').textContent = 'Sin datos del dispositivo';
           return;
         }
-        const d = res.data;
+        var d = res.data;
 
-        // ── Detección de offline via Epoch ──────────────────────
-        const epoch = parseInt(d['Epoch'] || 0);
-        const ahoraMs = Date.now();
-        const diffSeg = Math.floor((ahoraMs - epoch) / 1000);
-        const offline = epoch > 0 && diffSeg > 180;
+        var epoch = parseInt(d['Epoch'] || 0);
+        var ahoraMs = Date.now();
+        var diffSeg = Math.floor((ahoraMs - epoch) / 1000);
+        var offline = epoch > 0 && diffSeg > 180;
 
         if (offline) {
           setEstadoOffline(diffSeg);
         } else {
-          const estadoNum = parseInt(d['Estado'] ?? -1);
-          document.getElementById('hb-estado').textContent = ESTADOS[estadoNum] ?? '—';
+          var estadoNum = parseInt(d['Estado'] != null ? d['Estado'] : -1);
+          document.getElementById('hb-estado').textContent = ESTADOS[estadoNum] || '—';
           setEstadoOnline(estadoNum);
         }
 
-        // ── Métricas ────────────────────────────────────────────
-        document.getElementById('m-enviados').textContent = d['Enviados'] ?? '—';
-        document.getElementById('m-cola').textContent = d['Cola'] ?? '—';
-        document.getElementById('m-reconex').textContent = d['Reconexiones'] ?? '—';
-        document.getElementById('m-uptime').textContent = d['Uptime'] ?? '—';
-        document.getElementById('hb-tarjetas').textContent = d['Tarjetas'] ?? '—';
+        document.getElementById('m-enviados').textContent = d['Enviados'] != null ? d['Enviados'] : '—';
+        document.getElementById('m-cola').textContent = d['Cola'] != null ? d['Cola'] : '—';
+        document.getElementById('m-reconex').textContent = d['Reconexiones'] != null ? d['Reconexiones'] : '—';
+        document.getElementById('m-uptime').textContent = d['Uptime'] != null ? d['Uptime'] : '—';
+        document.getElementById('hb-tarjetas').textContent = d['Tarjetas'] != null ? d['Tarjetas'] : '—';
         document.getElementById('hb-device').textContent = (d['Device'] || '—').replace('GTech-ESP32-', '');
 
-        // ── Cola ────────────────────────────────────────────────
-        const cola = parseInt(d['Cola'] || 0);
-        const qb = document.getElementById('queueBadge');
-        const qt = document.getElementById('queueText');
-        const qs = document.getElementById('queueStatus');
+        var cola = parseInt(d['Cola'] || 0);
+        var qb = document.getElementById('queueBadge');
+        var qt = document.getElementById('queueText');
+        var qs = document.getElementById('queueStatus');
         qb.textContent = cola;
         if (cola > 0) {
-          qb.className = 'queue-badge';
-          qt.textContent = `${cola} evento(s) pendientes`;
-          qs.className = 'badge badge-amber';
-          qs.textContent = 'PENDIENTE';
+          qb.className = 'queue-badge'; qt.textContent = cola + ' evento(s) pendientes';
+          qs.className = 'badge badge-amber'; qs.textContent = 'PENDIENTE';
         } else {
-          qb.className = 'queue-badge empty';
-          qt.textContent = 'Cola offline vacía';
-          qs.className = 'badge badge-green';
-          qs.textContent = 'OK';
+          qb.className = 'queue-badge empty'; qt.textContent = 'Cola offline vacía';
+          qs.className = 'badge badge-green'; qs.textContent = 'OK';
         }
 
-        // ── Timestamp legible Colombia ──────────────────────────
-        const ts = d['Timestamp'] || '—';
-        const hace = offline
-          ? diffSeg < 120 ? `hace ${diffSeg}s` : `hace ${Math.floor(diffSeg / 60)}min`
+        var ts = d['Timestamp'] ? String(d['Timestamp']) : '—';
+        var hace = offline
+          ? (diffSeg < 120 ? 'hace ' + diffSeg + 's' : 'hace ' + Math.floor(diffSeg / 60) + 'min')
           : 'ahora';
-        document.getElementById('lastUpdate').textContent = `HB: ${ts} (${hace})`;
+        document.getElementById('lastUpdate').textContent = 'HB: ' + ts + ' (' + hace + ')';
 
-      } catch (e) {
-        console.error('Heartbeat error:', e);
-      }
+      } catch (e) { console.error('Heartbeat error:', e); }
     }
 
-    // ── ESTADO OFFLINE ──────────────────────────────────────────
-    function setEstadoOffline(diffSeg) {
-      const ALL_STATE_IDS = [...STATE_IDS, 'st-offline'];
-      ALL_STATE_IDS.forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.classList.remove('active');
-      });
-
-      const offlineCard = document.getElementById('st-offline');
-      if (!offlineCard) return;
-
-      let desc = 'Sin señal del dispositivo';
-      if (diffSeg > 0) {
-        const mins = Math.floor(diffSeg / 60);
-        const segs = diffSeg % 60;
-        desc = mins > 0 ? `${mins}m ${segs}s sin señal` : `${diffSeg}s sin señal`;
-      }
-      document.getElementById('offlineDesc').textContent = desc;
-      offlineCard.classList.add('active');
-      document.getElementById('hb-estado').textContent = 'OFFLINE';
-    }
-
-    // ── ESTADO ONLINE (restaura estado real) ─────────────────────
-    function setEstadoOnline(estadoNum) {
-      const ALL_STATE_IDS = [...STATE_IDS, 'st-offline'];
-      ALL_STATE_IDS.forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.classList.remove('active');
-      });
-      if (estadoNum >= 0 && estadoNum < STATE_IDS.length) {
-        document.getElementById(STATE_IDS[estadoNum]).classList.add('active');
-      }
-    }
-
-    // ── CARGAR EVENTOS ──────────────────────────────────────────
     async function cargarEventos() {
-      const tbody = document.getElementById('eventosBody');
+      var tbody = document.getElementById('eventosBody');
       try {
-        const res = await gasGet('eventos');
-        if (!res.ok || !res.data.length) {
+        var res = await gasGet('eventos');
+        if (!res.ok || !res.data || !res.data.length) {
           tbody.innerHTML = '<tr><td colspan="4" class="empty-state">Sin eventos registrados</td></tr>';
           return;
         }
-        const eventos = res.data.reverse();
-        document.getElementById('eventCount').textContent = `${eventos.length} registros`;
-        tbody.innerHTML = eventos.map(e => {
-          const ts = e.Timestamp ? String(e.Timestamp) : '—';
-          const tipoBadge = e.Tipo === 'ACCESO'
-            ? '<span class="badge badge-green">✓ ACCESO</span>'
-            : '<span class="badge badge-red">✗ DENEGADO</span>';
-          const fuenteBadge = (e.Fuente || '').includes('offline')
+        var eventos = res.data.reverse();
+        document.getElementById('eventCount').textContent = eventos.length + ' registros';
+        tbody.innerHTML = eventos.map(function (e) {
+          var ts = e.Timestamp ? String(e.Timestamp) : '—';
+          var uid = String(e.UID || '').padStart(8, '0') || '—';
+          var tipo = e.Tipo === 'ACCESO'
+            ? '<span class="badge badge-green">&#10003; ACCESO</span>'
+            : '<span class="badge badge-red">&#10007; DENEGADO</span>';
+          var fuente = (e.Fuente || '').indexOf('offline') !== -1
             ? '<span class="badge badge-amber">OFFLINE</span>'
             : '<span class="badge badge-blue">ONLINE</span>';
-          return `<tr>
-          <td class="ts">${ts}</td>
-          <td class="uid-cell">${String(e.UID || '').padStart(8, '0') || '—'}</td>
-          <td>${tipoBadge}</td>
-          <td>${fuenteBadge}</td>
-        </tr>`;
+          return '<tr><td class="ts">' + ts + '</td><td class="uid-cell">' + uid + '</td><td>' + tipo + '</td><td>' + fuente + '</td></tr>';
         }).join('');
       } catch (e) {
         tbody.innerHTML = '<tr><td colspan="4" class="empty-state">Error cargando eventos</td></tr>';
       }
     }
 
-    // ── CARGAR TARJETAS ─────────────────────────────────────────
     async function cargarTarjetas() {
-      const list = document.getElementById('tarjetasList');
+      var list = document.getElementById('tarjetasList');
       try {
-        const res = await gasGet('tarjetas');
-        if (!res.ok || !res.data.length) {
+        var res = await gasGet('tarjetas');
+        if (!res.ok || !res.data || !res.data.length) {
           list.innerHTML = '<div class="empty-state">Sin tarjetas registradas</div>';
           document.getElementById('cardCount').textContent = '0';
           return;
         }
         document.getElementById('cardCount').textContent = res.data.length;
-        list.innerHTML = res.data.map(t => `
-        <div class="tarjeta-item">
-          <div>
-            <div class="tarjeta-uid">${uid}</div>
-            <div class="tarjeta-date">${t.FechaAlta ? String(t.FechaAlta) : '—'}</div>
-          </div>
-          <button class="btn-revoke" onclick="revocarTarjeta('${uid}')">REVOCAR</button>
-        </div>
-      `;
-      }).join('');
-    } catch (e) {
-      list.innerHTML = '<div class="empty-state">Error cargando tarjetas</div>';
-    }
-  }
-
-    // ── AGREGAR TARJETA ─────────────────────────────────────────
-    async function agregarTarjeta() {
-      const uid = document.getElementById('newUID').value.trim().toUpperCase();
-      if (!uid || uid.length < 6) {
-        toast('UID inválido — mínimo 6 caracteres', 'err');
-        return;
+        list.innerHTML = res.data.map(function (t) {
+          var uid = String(t.UID || '').padStart(8, '0');
+          var fecha = t.FechaAlta ? String(t.FechaAlta) : '—';
+          return '<div class="tarjeta-item">'
+            + '<div>'
+            + '<div class="tarjeta-uid">' + uid + '</div>'
+            + '<div class="tarjeta-date">' + fecha + '</div>'
+            + '</div>'
+            + '<button class="btn-revoke" onclick="revocarTarjeta(\'' + uid + '\')">REVOCAR</button>'
+            + '</div>';
+        }).join('');
+      } catch (e) {
+        list.innerHTML = '<div class="empty-state">Error cargando tarjetas</div>';
       }
+    }
+
+    async function agregarTarjeta() {
+      var uid = document.getElementById('newUID').value.trim().toUpperCase();
+      if (!uid || uid.length < 6) { toast('UID inválido — mínimo 6 caracteres', 'err'); return; }
       try {
         toast('Enviando al dispositivo...', 'info');
-        await gasPost({ tipo: 'add-card', uid });
+        await gasPost({ tipo: 'add-card', uid: uid });
         document.getElementById('newUID').value = '';
         toast('Tarjeta agregada correctamente', 'ok');
         cargarTarjetas();
-      } catch (e) {
-        toast('Error al agregar tarjeta', 'err');
-      }
+      } catch (e) { toast('Error al agregar tarjeta', 'err'); }
     }
 
-    // ── REVOCAR TARJETA ─────────────────────────────────────────
     async function revocarTarjeta(uid) {
-      if (!confirm(`¿Revocar acceso a tarjeta ${uid}?`)) return;
+      if (!confirm('Revocar acceso a tarjeta ' + uid + '?')) return;
       try {
-        await gasPost({ tipo: 'delete-card', uid });
-        toast(`Tarjeta ${uid} revocada`, 'ok');
+        await gasPost({ tipo: 'delete-card', uid: uid });
+        toast('Tarjeta ' + uid + ' revocada', 'ok');
         cargarTarjetas();
-      } catch (e) {
-        toast('Error al revocar tarjeta', 'err');
-      }
+      } catch (e) { toast('Error al revocar tarjeta', 'err'); }
     }
 
-    // ── DIAGNÓSTICO REMOTO ──────────────────────────────────────
     async function solicitarDiagnostico() {
-      // Activar estado visual DIAGNÓSTICO
       setEstadoUI(3);
       toast('Solicitando diagnóstico al ESP32...', 'info');
-
-      // Activar efecto scan en heartbeat
-      const hbGrid = document.querySelector('.hb-grid');
+      var hbGrid = document.querySelector('.hb-grid');
       hbGrid.classList.add('hb-scanning');
-
-      // Mostrar barra de progreso
-      const prog = document.getElementById('diagProgress');
-      const fill = document.getElementById('diagFill');
+      var prog = document.getElementById('diagProgress');
+      var fill = document.getElementById('diagFill');
       prog.classList.add('active');
-      setTimeout(() => { fill.style.width = '100%'; }, 50);
-
-      // Cambiar texto del botón
-      const btn = document.querySelector('.btn-diag');
-      const btnOriginal = btn.innerHTML;
+      setTimeout(function () { fill.style.width = '100%'; }, 50);
+      var btn = document.querySelector('.btn-diag');
+      var btnOriginal = btn.innerHTML;
       btn.innerHTML = '⟳ ANALIZANDO SISTEMA...';
       btn.disabled = true;
       btn.style.opacity = '0.7';
-
-      // Actualizar métricas con valores parpadeando
-      setTimeout(async () => {
+      setTimeout(async function () {
         await cargarHeartbeat();
-
-        // Quitar efectos
         hbGrid.classList.remove('hb-scanning');
         prog.classList.remove('active');
         fill.style.width = '0%';
         btn.innerHTML = btnOriginal;
         btn.disabled = false;
         btn.style.opacity = '1';
-
-        toast('✓ Diagnóstico completado — métricas actualizadas', 'ok');
+        toast('Diagnostico completado — metricas actualizadas', 'ok');
       }, 3200);
     }
 
-    // ── CARGAR TODO ─────────────────────────────────────────────
     async function cargarTodo() {
       toast('Actualizando dashboard...', 'info');
-      await Promise.all([
-        cargarHeartbeat(),
-        cargarEventos(),
-        cargarTarjetas()
-      ]);
+      await Promise.all([cargarHeartbeat(), cargarEventos(), cargarTarjetas()]);
     }
 
-    // ── AUTO REFRESH cada 30 seg ─────────────────────────────────
     cargarTodo();
     setInterval(cargarTodo, 30000);
   </script>
